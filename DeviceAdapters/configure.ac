@@ -21,6 +21,7 @@ AX_BOOST_ASIO
 AX_BOOST_SYSTEM
 AX_BOOST_CHRONO
 AX_BOOST_DATE_TIME
+AX_BOOST_FILESYSTEM
 
 # Find Micro-Manager headers
 micromanager_cpp_path=${ac_pwd}/..
@@ -556,6 +557,7 @@ m4_define([device_adapter_dirs], [m4_strip([
    SouthPort
    SpectralLMM5
    Spot
+   StarlightXpress
    SutterLambda
    SutterLambda2
    SutterLambdaParallelArduino

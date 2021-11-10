@@ -76,7 +76,7 @@ Laser* LaserFactory::Create( LaserDriver* driver )
     std::string wavelength = "Unknown";
     
     if ( modelTokens.size() > 0 ) {
-        wavelength = std::to_string( (_Longlong) atoi( modelTokens[ 0 ].c_str() ) ); // TODO: Verify this, modelTokens[ 0 ] seems to use wrong index for wavelength...
+        wavelength = std::to_string( (long long) atoi( modelTokens[ 0 ].c_str() ) ); // TODO: Verify this, modelTokens[ 0 ] seems to use wrong index for wavelength...
     }
 
     Laser* laser;
@@ -90,7 +90,11 @@ Laser* LaserFactory::Create( LaserDriver* driver )
 
         laser = new Mld06Laser( "06-MLD", driver );
 
-    } else if ( firmwareVersion.find( "9.001" ) != std::string::npos ) {
+    } /*else if ( modelString.find( "-05-01-" ) ) { // TODO: uncomment once we add support for gen5b
+
+        //laser = new Gen5bLaser( "05", driver );
+
+    } */else if ( firmwareVersion.find( "9.001" ) != std::string::npos ) {
 
         static const int numberOfLines = 4;
         bool enabledLines[ numberOfLines ];

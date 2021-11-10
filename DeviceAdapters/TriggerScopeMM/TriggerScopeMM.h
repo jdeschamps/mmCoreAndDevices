@@ -100,6 +100,7 @@ public:
    // action interface
    // ----------------
    int OnCOMPort(MM::PropertyBase* pProp, MM::ActionType eAct);
+   int OnUseActionLEDs(MM::PropertyBase* pProp, MM::ActionType eAct);
    
    int OnSendSerialCmd(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnRecvSerialCmd(MM::PropertyBase* pProp, MM::ActionType eAct);
@@ -132,6 +133,7 @@ private:
    int error_;
    FILE* fidSerialLog_;
    double firmwareVer_;
+   bool useActionLEDs_;
    bool initialized_;
 
    long stepMode_ ;
@@ -204,7 +206,6 @@ private:
 	bool initialized_ ;
 	bool busy_;
 	bool gateOpen_;
-	bool open_;
    bool sequenceOn_;
    bool sequenceTransitionOnRising_;
    uint8_t voltrange_;
