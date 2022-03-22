@@ -3,12 +3,19 @@
 // PROJECT:       Micro-Manager
 // SUBSYSTEM:     DeviceAdapters
 //-----------------------------------------------------------------------------
-// DESCRIPTION:   Controls the Elliptec sliders ELL6, ELL9 and ELL17_20
+// DESCRIPTION:   Controls the Elliptec sliders ELL6, ELL9, ELL12 and ELL17_20
 // COPYRIGHT:     EMBL
 // LICENSE:       LGPL
 // AUTHOR:        Joran Deschamps and Anindita Dasgupta, EMBL
 //-----------------------------------------------------------------------------
 
+// In the future it would be much more elegant to create a single class, at least
+// concerning the devices with discrete positions, that would work for all ELL devices.
+// This would mean that the ID of the device would be checked at instantiation, and 
+// compared with a list of compatible devices (e.g. ELL6, 9 and 12). The number of 
+// positions would be then set accordingly (2, 4 or 6). Note that unless it has been
+// updated the position command is different for ELL6 and ELL9.
+// Currently there is a lot of code duplication.
 
 #include "MMDevice.h"
 #include "DeviceBase.h"
@@ -100,6 +107,45 @@ private:
 	double pulsesPerMU_;
 };
 
+class ELL12 : public CStateDeviceBase<ELL12>
+{
+public:
+	ELL12();
+	~ELL12();
+
+	// MMDevice API
+	// ------------
+	int Initialize();
+	int Shutdown();
+
+	void GetName(char* pszName) const;
+	bool Busy();
+	unsigned long GetNumberOfPositions()const { return numPos_; }
+
+	int getID(std::string* id);
+	int setState(int state);
+	int getState(int* state);
+
+	// convenience functions
+	bool isError(std::string);
+	int getErrorCode(std::string message);
+	std::string removeLineFeed(std::string answer);
+	std::string removeCommandFlag(std::string message);
+
+	// action interface
+	// ----------------
+	int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
+	int OnPort(MM::PropertyBase* pProp, MM::ActionType eAct);
+	int OnChannel(MM::PropertyBase* pProp, MM::ActionType eAct);
+
+private:
+	std::string port_;
+	long numPos_;
+	std::string channel_;
+	bool initialized_;
+	bool busy_;
+};
+
 class ELL9 : public CStateDeviceBase<ELL9>
 {
 public:
@@ -113,7 +159,7 @@ public:
 
 	void GetName(char* pszName) const;
 	bool Busy();
-	unsigned long GetNumberOfPositions()const {return numPos_;}
+	unsigned long GetNumberOfPositions()const { return numPos_; }
 
 	int getID(std::string* id);
 	int setState(int state);
